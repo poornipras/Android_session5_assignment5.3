@@ -1,0 +1,92 @@
+package com.pooja.contextmenuxml;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Pooja on 12/25/2016.
+ */
+
+public class custom_adapter extends BaseAdapter {
+    Context ctx;
+    ArrayList<eachrow> list;
+
+    public custom_adapter(Context ctx) {
+        this.ctx = ctx;
+        list = new ArrayList<eachrow>();
+        Resources res = ctx.getResources();
+        String[] name = res.getStringArray(R.array.Name);
+        String[] number = res.getStringArray(R.array.Number);
+        for (int i = 0; i < 3; i++)
+        {
+            list.add(new eachrow(name[i], number[i]));
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return list.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View listview = view;
+        myholder holder = null;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            listview = inflater.inflate(R.layout.row_design, viewGroup, Boolean.parseBoolean(null));
+            holder = new myholder(listview);
+            listview.setTag(holder);
+        }
+        else
+        {
+            holder= (myholder) listview.getTag();
+        }
+        eachrow temp=list.get(i);
+        holder.name.setText(temp.name);
+        holder.number.setText(temp.number);
+        return listview;
+    }
+
+    public class eachrow {
+        String name, number;
+
+        eachrow(String name, String number) {
+            this.name = name;
+            this.number = number;
+        }
+    }
+
+    public class myholder
+    {
+        TextView name,number;
+        public myholder(View listview)
+        {
+           name=(TextView)listview.findViewById(R.id.txt_name);
+            number= (TextView) listview.findViewById(R.id.txt_number);
+        }
+    }
+
+
+
+
+}
+
+

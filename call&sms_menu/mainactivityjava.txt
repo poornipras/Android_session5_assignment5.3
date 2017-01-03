@@ -1,0 +1,88 @@
+package com.pooja.contextmenuxml;
+
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import static com.pooja.contextmenuxml.R.id.call;
+import static com.pooja.contextmenuxml.R.id.txt_number;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
+{
+    private static final boolean TODO =true;
+    ListView lv;
+    String my;
+    String[]numbers;
+    String callnum;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        lv = (ListView) findViewById(R.id.show_list);
+        lv.setAdapter(new custom_adapter(this));
+        registerForContextMenu(lv);
+        lv.setOnItemClickListener(this);
+
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Select the Action");
+        MenuInflater inflator = getMenuInflater();
+        inflator.inflate(R.menu.main_menu, menu);
+    }
+
+   @Override
+    public boolean onContextItemSelected(MenuItem item)
+   {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId())
+        {
+            case R.id.call:
+                //used ACTION_DIAL  instead of ACTION_CALL to show the selected number was loaded
+                Intent intent=new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+callnum));
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(),"Call number: "+callnum,Toast.LENGTH_LONG).show();
+                break;
+            case R.id.sms:
+                 Intent i=new Intent(Intent.ACTION_VIEW,Uri.parse("sms:"+callnum));
+                 startActivity(i);
+                 Toast.makeText(getApplicationContext(),"Sms to: "+callnum,Toast.LENGTH_LONG).show();
+                 break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+    {
+        custom_adapter.eachrow e= (custom_adapter.eachrow) lv.getItemAtPosition(i);
+        String callnumber=e.number;
+        getnumber(callnumber);
+        Toast.makeText(getApplicationContext(),"hello"+callnumber,Toast.LENGTH_LONG).show();
+    }
+
+    public void getnumber(String s)
+    {
+        callnum=s;
+    }
+}

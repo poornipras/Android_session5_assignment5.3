@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ContextMenuXml</string>
+    <string-array name="Name">
+        <item>Ashu</item>
+        <item>Pearl</item>
+        <item>Christy</item>
+    </string-array>
+
+    <string-array name="Number">
+        <item>12345</item>
+        <item>34567</item>
+        <item>56556</item>
+    </string-array>
+
+</resources>
